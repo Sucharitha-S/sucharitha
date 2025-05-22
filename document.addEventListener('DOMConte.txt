@@ -1,0 +1,68 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('validationForm');
+    const fullNameInput = document.getElementById('fullName');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const errorMessages = document.querySelectorAll('.error-message');
+    const successMessage = document.getElementById('successMessage');
+
+    // Function to clear all error messages
+    function clearErrors() {
+        errorMessages.forEach(error => {
+            error.textContent = '';
+        });
+    }
+
+    // Event listener for form submission
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        clearErrors();
+        let isValid = true;
+
+        // Validation for Full Name
+        if (fullNameInput.value.trim().length < 5) {
+            document.getElementById('fullNameError').textContent = 'Name must be at least 5 characters long.';
+            isValid = false;
+        }
+
+        // Validation for Email ID
+        if (!emailInput.value.includes('@')) {
+            document.getElementById('emailError').textContent = 'Enter a valid email address (must contain @).';
+            isValid = false;
+        }
+
+        // Validation for Phone Number
+        const phoneRegex = /^[0-9]{10}$/;
+        if (phoneInput.value === '123456789' || !phoneRegex.test(phoneInput.value)) {
+            document.getElementById('phoneError').textContent = 'Phone number should be a 10-digit number and not be "123456789".';
+            isValid = false;
+        }
+
+        // Validation for Password
+        if (passwordInput.value.toLowerCase() === 'password' ||
+            passwordInput.value.toLowerCase() === fullNameInput.value.toLowerCase() ||
+            passwordInput.value.length < 8) {
+            document.getElementById('passwordError').textContent = 'Password cannot be "password", your name, or less than 8 characters.';
+            isValid = false;
+        }
+
+        // Validation for Confirm Password
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            document.getElementById('confirmPasswordError').textContent = 'Password and confirm password must match.';
+            isValid = false;
+        }
+
+        // If all validations pass, you can proceed with form submission (for now, just show a success message)
+        if (isValid) {
+            successMessage.style.display = 'block';
+            form.reset(); // Optionally reset the form
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000); // Hide success message after 3 seconds
+            // In a real scenario, you would submit the form data here, e.g., using fetch API.
+            console.log('Form submitted successfully!');
+        }
+    });
+});
